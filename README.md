@@ -1,47 +1,105 @@
-# Dashcam_Facial_Recognition
+# Dashcam - Driver Identity Recognition
 
-## Step to install 
-### Local System
+A Python-based facial recognition pipeline designed for dashcam image processing, including dataset creation, encoding, and recognition.  
+Supports local workflows and AWS Lambda deployment.
 
-1. Download and Install Python 3.7 [https://www.python.org/downloads/release/python-370/]
-2. Run `installation/setup.py` for downloading Dependences/Library (make sure dlib file is present in installation folder)
+---
 
-3. Find `dataset_generation_local.py` , `encodeGenerator_local.py` & `faceRecognition_local.py` to run the flow and flow below given order
-4. Run using `python file_name.py` (e.g. : dataset_generation_local.py)
-#### Local File Workflow
+## Table of Contents
 
-1. `dataset_generation_local.py` : Enter ID name and Press SPACE to take photos (take multiple shots with different angle).
-2. `encodeGenerator_local.py` : It will fetch images taken and will generate an encoding ".p"(pickle) file
-3. `faceRecognition_local.py` : It will process the encoding file and recognize the images. 
+- [Installation (Local System)](#installation-local-system)
+- [Local Workflow](#local-workflow)
+- [Technical Details](#technical-details)
+- [AWS Lambda: EncodeGenerator](#aws-lambda-encodegenerator)
+- [Other Resources](#other-resources)
 
-### Technical Details
-- Python Version: 3.7.0
+---
 
-- Package 
-  - os
-  -  numpy
-  -  opencv-python
-  -  face_recognition (https://github.com/ageitgey/face_recognition)
-     -  face_recognition_models
-     -  Click>=6.0
-     -  dlib>=19.3.0 (https://github.com/sachadee/Dlib/tree/main)
-     -  Pillow
-     -  scipy>=0.17.0
+## Installation (Local System)
 
-Alternative for Layers ARNS : https://github.com/keithrozario/Klayers/tree/master 
+1. **Install Python 3.7**  
+   [Download Python 3.7.0](https://www.python.org/downloads/release/python-370/)
 
-## EncodeGenrator Lambda Function
-Add below (Key, Value) in `Configurations/Environment variables`.
+2. **Install Dependencies**  
+   Run the setup script to automatically install required packages:  
+python installation/setup.py
 
-**This is Example for Building and Testing**
-| **Key**                     | **Value**        |
-| ----------------------  | -----------  |
-|enhanced_img_bucket      | temp-dashcam |
-|enhanced_img_folder      | enhanced-img |
-|source_img_bucket        | temp-dashcam |
-|source_img_folder        | dataset-img  |
-|encoding_storing_bucket  | temp-dashcam |
-|encoding_storing_folder  | encoding     |
+yaml
+Copy
+Edit
+*Ensure that `dlib` is present in the `installation` folder before running this step.*
 
-### Other Resources
-Image Correction used in `encodeGenerator_local.py` : https://www.geeksforgeeks.org/image-enhancement-techniques-using-opencv-python/
+---
+
+## Local Workflow
+
+There are three main scripts to run in order:
+
+### 1. `dataset_generation_local.py`
+- **Purpose:** Capture face images for the dataset.
+- **Usage:**
+-
+- python dataset_generation_local.py
+- **Instructions:**  
+- Enter the ID/name when prompted.
+- Press **SPACE** to capture each photo (take multiple shots from different angles).
+
+### 2. `encodeGenerator_local.py`
+- **Purpose:** Generate facial encodings from the captured images.
+- **Usage:**  
+
+python encodeGenerator_local.py
+- **Instructions:**  
+- This will fetch all collected images and generate an encoding `.p` (pickle) file.
+
+### 3. `faceRecognition_local.py`
+- **Purpose:** Perform facial recognition using the generated encodings.
+- **Usage:**  
+python faceRecognition_local.py
+
+- **Instructions:**  
+- This script will process images and recognize faces using the encoding file.
+
+---
+
+## Technical Details
+
+- **Python Version:** 3.7.0
+
+- **Key Packages:**
+- `os`
+- `numpy`
+- `opencv-python`
+- `face_recognition` ([GitHub link](https://github.com/ageitgey/face_recognition))
+  - `face_recognition_models`
+  - `Click>=6.0`
+  - `dlib>=19.3.0` ([dlib build guide](https://github.com/sachadee/Dlib/tree/main))
+  - `Pillow`
+  - `scipy>=0.17.0`
+
+- **Alternative for AWS Lambda Layers (ARNs):**  
+[KLayers Repository](https://github.com/keithrozario/Klayers/tree/master)
+
+---
+
+## AWS Lambda: EncodeGenerator
+
+For cloud deployment, add these key-value pairs as environment variables in your Lambda function configuration:
+
+| **Key**                    | **Value**        |
+|----------------------------|------------------|
+| `enhanced_img_bucket`      | temp-dashcam     |
+| `enhanced_img_folder`      | enhanced-img     |
+| `source_img_bucket`        | temp-dashcam     |
+| `source_img_folder`        | dataset-img      |
+| `encoding_storing_bucket`  | temp-dashcam     |
+| `encoding_storing_folder`  | encoding         |
+
+---
+
+## Other Resources
+
+- **Image Enhancement Reference:**  
+[Image enhancement techniques using OpenCV](https://www.geeksforgeeks.org/image-enhancement-techniques-using-opencv-python/)
+
+---
